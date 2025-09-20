@@ -1,5 +1,5 @@
 {% load static %}
-{% with company_name="Restaurante" %}
+{% with company_name="La Esencia Gourmet" %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,7 +42,7 @@
         <div class="d-flex py-3 align-items-center justify-content-between">
 
           <!-- Logo -->
-          <a href="index.html" class="logo d-flex align-items-center">
+          <a href={% url 'Home:homeapp' %} class="logo d-flex align-items-center">
             <!-- Uncomment the line below if you also wish to use an image logo -->
             <!-- <img src="assets/img/logo.webp" alt=""> -->
             <h1 class="sitename">{{ company_name }}</h1>
@@ -119,10 +119,10 @@
       <div class="container-fluid container-xl position-relative">
         <nav id="navmenu" class="navmenu">
           <ul>
-            <li><a href="index.html">Inicio</a></li>
+            <li><a href={% url 'Home:homeapp' %}>Inicio</a></li>
             <li><a href="category.html">Menu</a></li>
             <li><a href="contact.html">Reserva</a></li>
-            <li><a href="about.html" class="active">Acerca de </a></li>
+            <li><a href={% url 'Home:acerca_app' %} class="active">Acerca de </a></li>
             <li><a href="contact.html">Contacto</a></li>
             <!-- <li><a href="checkout.html">Checkout</a></li>
             <li><a href="product-details.html">Product Details</a></li>

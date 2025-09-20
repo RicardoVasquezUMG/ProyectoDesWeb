@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contenido %}
+
+    <section id="about" class="about section">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-4">
+          <div class="col-lg-6 order-1 order-lg-2 d-flex align-items-center justify-content-center bg-warning bg-opacity-25 rounded-4 p-2">
+            <img src="{% static 'assets/img/about.jpg' %}" class="img-fluid rounded-4 shadow" style="max-height:340px; object-fit:cover;" alt="Restaurante Gourmet">
+          </div>
+          <div class="col-lg-6 order-2 order-lg-1 content bg-light bg-gradient rounded-4 p-4">
+            <h3>Sobre <span style="color:#d35400;">La Esencia Gourmet</span></h3>
+            <p class="fst-italic">
+              En <b>La Esencia Gourmet</b> celebramos la alta cocina con pasión y creatividad. Somos un restaurante dedicado a ofrecer experiencias culinarias únicas, fusionando ingredientes frescos, técnicas innovadoras y una presentación impecable.
+            </p>
+            <ul>
+              <li><i class="bi bi-check2-all"></i> <span>Menú de autor con platos exclusivos y postres artesanales.</span></li>
+              <li><i class="bi bi-check2-all"></i> <span>Ambiente elegante, moderno y acogedor, ideal para ocasiones especiales.</span></li>
+              <li><i class="bi bi-check2-all"></i> <span>Selección de vinos premium y coctelería de autor para maridar cada experiencia.</span></li>
+            </ul>
+            <p>
+              Nuestro chef, <b>Martín Herrera</b>, galardonado internacionalmente, lidera un equipo apasionado que cuida cada detalle, desde la selección de ingredientes hasta el servicio personalizado. Ven y descubre por qué somos el destino favorito de los amantes de la buena mesa en la ciudad.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section><!-- /About Section -->
+
+    
+  <section id="why-us" class="why-us section mt-0 pt-0">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>¿Por qué elegirnos?</h2>
+        <p>Descubre lo que nos hace únicos</p>
+      </div>
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="card h-100 border-0 shadow-sm bg-warning bg-opacity-25">
+              <div class="card-body">
+                <span class="badge bg-success mb-2">01</span>
+                <h4 class="card-title">Experiencia Gourmet</h4>
+                <p class="card-text">Platos de alta cocina preparados con ingredientes orgánicos y técnicas de vanguardia, para sorprender tu paladar en cada visita.</p>
+              </div>
+            </div>
+          </div><!-- Card Item -->
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="card h-100 border-0 shadow-sm bg-info bg-opacity-25">
+              <div class="card-body">
+                <span class="badge bg-success mb-2">02</span>
+                <h4 class="card-title">Atención Personalizada</h4>
+                <p class="card-text">Nuestro equipo te acompaña en cada detalle, recomendando maridajes y adaptando menús a tus preferencias y necesidades.</p>
+              </div>
+            </div>
+          </div><!-- Card Item -->
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="card h-100 border-0 shadow-sm bg-danger bg-opacity-25">
+              <div class="card-body">
+                <span class="badge bg-success mb-2">03</span>
+                <h4 class="card-title">Ambiente Exclusivo</h4>
+                <p class="card-text">Un espacio elegante y moderno, con iluminación cálida y música suave, ideal para cenas románticas, reuniones de negocios o celebraciones especiales.</p>
+              </div>
+            </div>
+          </div><!-- Card Item -->
+        </div>
+      </div>
+    </section>
+{% endblock %}
