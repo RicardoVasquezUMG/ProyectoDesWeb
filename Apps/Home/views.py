@@ -6,3 +6,5 @@ class HomeView(TemplateView):
 
 class AcercaView(TemplateView): 
     template_name = 'acerca.html'
+
+ 
