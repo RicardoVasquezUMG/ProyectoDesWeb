@@ -16,19 +16,32 @@
                 <p>Inicia sesión en tu cuenta</p>
               </div>
 
-              <form class="auth-form-content">
+              <form class="auth-form-content" method="post" action="">
+                {% csrf_token %}
+                {% if form.errors or error_message %}
+                  <div class="alert alert-danger">
+                    {% for field in form %}
+                      {% for error in field.errors %}
+                        <div>{{ field.label }}: {{ error }}</div>
+                      {% endfor %}
+                    {% endfor %}
+                    {% if error_message %}
+                      <div>{{ error_message }}</div>
+                    {% endif %}
+                  </div>
+                {% endif %}
                 <div class="input-group mb-3">
                   <span class="input-icon">
                     <i class="bi bi-envelope"></i>
                   </span>
-                  <input type="email" class="form-control" placeholder="Email address" required="" autocomplete="email">
+                  <input type="email" name="email" class="form-control" placeholder="Email address" required autocomplete="email">
                 </div>
 
                 <div class="input-group mb-3">
                   <span class="input-icon">
                     <i class="bi bi-lock"></i>
                   </span>
-                  <input type="password" class="form-control" placeholder="Password" required="" autocomplete="current-password">
+                  <input type="password" name="contrasena" class="form-control" placeholder="Password" required autocomplete="current-password">
                   <span class="password-toggle">
                     <i class="bi bi-eye"></i>
                   </span>
@@ -42,6 +55,7 @@
                   Iniciar Sesión
                   <i class="bi bi-arrow-right"></i>
                 </button>
+                
 
                 <div class="divider">
                   <span>or</span>
@@ -49,8 +63,7 @@
 
                 <div class="switch-form">
                   <span>No tienes cuentas?</span>
-                  <button type="button" class="switch-btn" data-target="register">Crear cuenta</button>
-                </div>
+                    <a href="{% url 'Cliente:registrarCliente' %}" class="switch-btn">Crear cuenta</a></div>
               </form>
             </div>
           </div>

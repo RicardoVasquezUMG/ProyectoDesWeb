@@ -67,6 +67,9 @@
             </button>
 
             <!-- Account -->
+            {% if request.session.cliente_nombre %}
+                    <h6>Hola, <span class="fw-bold">{{ request.session.cliente_nombre }}</span></h6>
+            {% endif %}
             <div class="dropdown account-dropdown">
               <button class="header-action-btn" data-bs-toggle="dropdown">
                 <i class="bi bi-person"></i>
@@ -94,8 +97,15 @@
                   </a>
                 </div>
                 <div class="dropdown-footer">
-                  <a href={% url 'Cliente:registrarCliente' %} class="btn btn-primary w-100 mb-2">Registrar</a>
-                  <a href={% url 'Cliente:loginapp' %} class="btn btn-outline-primary w-100">Iniciar Sesion</a>
+                  {% if not request.session.cliente_id %}
+                    <a href="{% url 'Cliente:registrarCliente' %}" class="btn btn-primary w-100 mb-2">Registrar</a>
+                    <a href="{% url 'Cliente:loginapp' %}" class="btn btn-outline-primary w-100">Iniciar Sesion</a>
+                  {% else %}
+                    <form method="post" action="{% url 'Cliente:logout' %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-danger w-100">Cerrar Sesión</button>
+                    </form>
+                  {% endif %}
                 </div>
               </div>
             </div>
