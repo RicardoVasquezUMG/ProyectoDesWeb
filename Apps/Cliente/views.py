@@ -6,7 +6,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from .forms import ClienteForm
-from .models import Cliente
+from .models import Cliente, Producto, Categoria
 
 def LoginView(request):
 	error_message = None
@@ -29,7 +29,7 @@ def logout_cliente(request):
 	if request.method == 'POST':
 		request.session.flush()
 		return redirect('Cliente:loginapp')
-	return redirect('Cliente:menu')
+	return redirect('Home:homeapp')
 
 class CrearClienteView(CreateView):
 	model = Cliente
@@ -38,6 +38,24 @@ class CrearClienteView(CreateView):
 	success_url = reverse_lazy('Cliente:loginapp')
 
 
-@method_decorator(login_required(login_url='Cliente:loginapp'), name='dispatch')
 class MenuView(TemplateView):
 	template_name = 'Menu.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		context['productos'] = Producto.objects.all()
+		context['categorias'] = Categoria.objects.all()
+		return context
+
+class DetalleProductoView(TemplateView):
+	template_name = 'detalle_producto.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		producto_id = self.kwargs.get('producto_id')
+		try:
+			producto = Producto.objects.get(id=producto_id)
+			context['producto'] = producto
+		except Producto.DoesNotExist:
+			context['error_message'] = 'Producto no encontrado.'
+		return context
