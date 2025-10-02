@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cliente
+from .models import Cliente, Producto
 
 class ClienteForm(forms.ModelForm):
     
@@ -9,3 +9,8 @@ class ClienteForm(forms.ModelForm):
         widgets = {
             'contrasena': forms.PasswordInput(),
         }
+
+class ProductoForm(forms.ModelForm):
+    class Meta:
+        model = Producto        
+        exclude = ['creacion'] 
