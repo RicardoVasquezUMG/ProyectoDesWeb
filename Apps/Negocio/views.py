@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, UpdateView, CreateView
+from django.views.generic import TemplateView, UpdateView, CreateView, View
+from django.shortcuts import redirect, get_object_or_404
 from Apps.Cliente.forms import ProductoForm
 from Apps.Cliente.models import Producto
 from django.urls import reverse_lazy
@@ -38,3 +39,9 @@ class ProductoCrearView(CreateView):
     form_class = ProductoForm
     template_name = 'productoCrear.html'
     success_url = reverse_lazy('Negocio:producto_crud')
+
+class ProductoEliminarView(View):
+    def post(self, request, pk, *args, **kwargs):
+        producto = get_object_or_404(Producto, pk=pk)
+        producto.delete()
+        return redirect('Negocio:producto_crud')   

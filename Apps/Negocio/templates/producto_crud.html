@@ -81,7 +81,10 @@
                   <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
                     <div class="item-actions d-flex justify-content-center gap-1">
                       <a href="{% url 'Negocio:producto_editar' producto.id %}" class="btn btn-primary btn-sm">Editar</a>
-                      <button class="btn btn-danger btn-sm">Eliminar</button>
+                      <form action="{% url 'Negocio:producto_eliminar' producto.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">Eliminar</button>
+                      </form>
                       <a href="{% url 'Negocio:producto_ver' producto.id %}" class="btn btn-success btn-sm">Ver</a>
                     </div>
                   </div>

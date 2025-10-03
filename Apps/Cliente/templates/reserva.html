@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contenido %}
+  <main id="main">
+    <!-- Book A Table Section -->
+    <section id="book-a-table" class="book-a-table section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="d-flex flex-row justify-content-center align-items-start" style="gap: 50px; padding-left: 50px; padding-right: 50px;">
+          <div class="generic-form-div rounded shadow-lg p-4" style="background: #fff; min-width: 320px; flex: 1 1 0; align-self: flex-start;" data-aos="fade-right" data-aos-delay="200">
+            <div class="reservation-form-container">
+              <div class="form-header content">
+                <span style="color: RGB(255, 102, 0) ;">REALIZA UNA RESERVA</span>
+                <h3><strong>Reserva tu mesa hoy</strong></h3>
+                <p>Disfruta de una experiencia gastronómica única. Reserva tu mesa con nosotros y asegura tu lugar para compartir momentos especiales con quienes más quieres.</p></div>
+
+              <form method="post" class="php-email-form">
+                {% csrf_token %}
+                <div class="row g-3">
+                  <div class="col-12 form-group">
+                    {{ form.fecha.label_tag }}
+                    {{ form.fecha }}
+                  </div>
+                  <div class="col-12 form-group">
+                    {{ form.hora.label_tag }}
+                    {{ form.hora }}
+                  </div>
+                  <div class="col-12 form-group">
+                    {{ form.numero_personas.label_tag }}
+                    {{ form.numero_personas }}
+                  </div>
+                  <div class="col-12 form-group">
+                    {{ form.comentarios.label_tag }}
+                    {{ form.comentarios }}
+                  </div>
+                </div>
+                {% if form.errors %}
+                  <div class="my-3">
+                    <div class="error-message">Por favor corrige los errores en el formulario.</div>
+                  </div>
+                {% endif %}
+                <div class="text-center mt-4 mb-4">
+                  <button type="submit" class="btn-book-table rounded border-0 px-5 py-3 fs-5" style="background-color: RGB(255, 102, 0); color: #fff; margin-bottom: 50px; box-shadow: none; font-size: 1.5rem;">
+                  Confirmar Reserva
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="generic-info-div rounded p-4" style="background: #fff; min-width: 320px; flex: 1 1 0;" data-aos="fade-left" data-aos-delay="300">
+            <div class="restaurant-info">
+                <div class="info-image">
+                <img src="{% static 'assets/img/restaurant/showcase-4.webp' %}" alt="Restaurant interior" class="img-fluid rounded">
+                </div>
+
+              <div class="info-content content">
+                <div class="restaurant-contact">
+                  <h4>Información del Restaurante</h4>
+
+                  <div class="info-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="icon-box">
+                      <i class="bi bi-clock"></i>
+                    </div>
+                    <div class="info-text">
+                      <h5>Horario de Apertura</h5>
+                      <p>Lun - Vie: 11:00 AM - 11:00 PM<br>
+                        Sáb - Dom: 10:00 AM - 12:00 AM</p>
+                    </div>
+                  </div>
+
+                  <div class="info-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="icon-box">
+                      <i class="bi bi-geo-alt"></i>
+                    </div>
+                    <div class="info-text">
+                      <h5>Nuestra Ubicación</h5>
+                      <p>5625 Riverside Avenue<br>Newport, RI 02840</p>
+                    </div>
+                  </div>
+
+                  <div class="info-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="icon-box">
+                      <i class="bi bi-telephone"></i>
+                    </div>
+                    <div class="info-text">
+                      <h5>Reservaciones</h5>
+                      <p>+1 (401) 555-8792</p>
+                    </div>
+                  </div>
+
+                  <div class="info-item" data-aos="fade-up" data-aos-delay="400">
+                    <div class="icon-box">
+                      <i class="bi bi-envelope"></i>
+                    </div>
+                    <div class="info-text">
+                      <h5>Escríbenos</h5>
+                      <p>reservations@example.com</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="reservation-cta" data-aos="fade-up" data-aos-delay="500">
+                  <h5>¿Prefieres llamar?</h5>
+                  <a href="tel:+14015558792" class="phone-button">
+                    <i class="bi bi-telephone-fill"></i>
+                    Llama para Reservaciones
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Book A Table Section -->
+  </main>
+{% endblock %}

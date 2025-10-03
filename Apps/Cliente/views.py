@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .forms import ClienteForm
-from .models import Cliente, Producto, Categoria
+from .forms import ClienteForm, ReservaForm
+from .models import Cliente, Producto, Categoria, Reserva
 
 def LoginView(request):
 	error_message = None
@@ -59,3 +59,9 @@ class DetalleProductoView(TemplateView):
 		except Producto.DoesNotExist:
 			context['error_message'] = 'Producto no encontrado.'
 		return context
+
+class CrearReservaView(CreateView):
+	model = Reserva	
+	template_name = 'reserva.html'
+	form_class = ReservaForm
+	success_url = reverse_lazy('Cliente:menuapp')
