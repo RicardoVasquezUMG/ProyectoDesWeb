@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contenido %}
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container d-lg-flex justify-content-between align-items-center">
+        <h1 class="mb-2 mb-lg-0">Manejo de Reservas</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="#">Home</a></li>
+            <li class="current">Manejo de Reservas</li>
+          </ol>
+        </nav>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Reservas Section -->
+    <section id="reservas" class="cart section" style="padding-top: 1.5rem !important; padding-bottom: 1.5rem !important;">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row align-items-start">
+          <div class="col-lg-3 col-md-4 mb-4">
+            <div class="ms-0">
+              <h2>Nueva Reserva</h2>
+               <a href="{% url 'Negocio:reserva_crear' %}" class="btn btn-primary mb-3">Agregar Reserva</a>
+            </div>
+          </div>
+          <div class="col-lg-9 col-md-8" data-aos="fade-up" data-aos-delay="200">
+            <div class="cart-items">
+              <div class="cart-header d-none d-lg-block">
+                <div class="row align-items-center">
+                  <div class="col-lg-2"><h5>Cliente</h5></div>
+                  <div class="col-lg-2 text-center"><h5>Fecha</h5></div>
+                  <div class="col-lg-2 text-center"><h5>Hora</h5></div>
+                  <div class="col-lg-2 text-center"><h5>Personas</h5></div>
+                  <div class="col-lg-2 text-center"><h5>Estado</h5></div>
+                  <div class="col-lg-2 text-center"><h5>Acciones</h5></div>
+                </div>
+              </div>
+              {% for reserva in reservas %}
+              <div class="cart-item">
+                <div class="row align-items-center">
+                  <div class="col-lg-2 col-12 mt-3 mt-lg-0 mb-lg-0 mb-3">
+                    <div class="product-details">
+                      <h6 class="product-title">{{ reserva.cliente.nombre }} {{ reserva.cliente.apellido }}</h6>
+                    </div>
+                  </div>
+                  <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
+                    <span>{{ reserva.fecha }}</span>
+                  </div>
+                  <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
+                    <span>{{ reserva.hora|time:"H:i" }}</span>
+                  </div>
+                  <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
+                    <span>{{ reserva.numero_personas }}</span>
+                  </div>
+                  <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
+                    <span>{{ reserva.get_estado_display }}</span>
+                  </div>
+                  <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
+                    <div class="item-actions d-flex justify-content-center gap-1">
+                      <a href="{% url 'Negocio:reserva_editar' reserva.id %}" class="btn btn-primary btn-sm">Editar</a>
+                      <form action="{% url 'Negocio:reserva_eliminar' reserva.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar esta reserva?');">Eliminar</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- /Reservas Section -->
+
+  </main>
+{% endblock %}

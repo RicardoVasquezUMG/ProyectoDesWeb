@@ -87,6 +87,14 @@
                     <i class="bi bi-bag-check me-2"></i>
                     <span>Mis Ordenes</span>
                   </a>
+                  <a class="dropdown-item d-flex align-items-center" href={% url 'Negocio:producto_crud' %}>
+                    <i class="bi bi-gear me-2"></i>
+                    CRUD Productos
+                  </a>
+                  <a class="dropdown-item d-flex align-items-center" href={% url 'Negocio:reserva_crud' %}>
+                    <i class="bi bi-gear me-2"></i>
+                    CRUD Reservas
+                  </a>
                   <a class="dropdown-item d-flex align-items-center" href="account.html">
                     <i class="bi bi-calendar-check me-2"></i>
                     <span>Reservas</span>
@@ -134,7 +142,7 @@
             <li><a href={% url 'Cliente:reserva' %}>Reserva</a></li>
             <li><a href={% url 'Home:acerca_app' %}>Acerca de </a></li>
             <li><a href="contact.html">Contacto</a></li>
-            <li><a href={% url 'Negocio:producto_crud' %}>CRUD Productos</a></li>
+            
             <!-- <li><a href="checkout.html">Checkout</a></li>
             <li><a href="product-details.html">Product Details</a></li>
             <li><a href="cart.html">Cart</a></li> -->

@@ -18,11 +18,13 @@ class ProductoForm(forms.ModelForm):
 class ReservaForm(forms.ModelForm):
     class Meta:
         model = Reserva
-        fields = ['fecha', 'hora', 'numero_personas', 'comentarios']
+        fields = ['cliente', 'fecha', 'hora', 'numero_personas', 'estado', 'comentarios']
         widgets = {
+            'cliente': forms.Select(attrs={'class': 'form-control'}),
             'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'hora': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
             'numero_personas': forms.NumberInput(attrs={'class': 'form-control', 'min': 1, 'max': 7}),
+            'estado': forms.Select(attrs={'class': 'form-control'}),
             'comentarios': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
         }
 
