@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, UpdateView, CreateView, View
 from django.shortcuts import redirect, get_object_or_404
-from Apps.Cliente.forms import ProductoForm, ReservaForm
-from Apps.Cliente.models import Producto, Reserva
+from Apps.Cliente.forms import ProductoForm, ReservaForm, CategoriaForm
+from Apps.Cliente.models import Producto, Reserva , Categoria
 from django.urls import reverse_lazy
 
 # Create your views here.
@@ -72,4 +72,32 @@ class ReservaEliminarView(View):
     def post(self, request, pk, *args, **kwargs):
         reserva = get_object_or_404(Reserva, pk=pk)
         reserva.delete()
-        return redirect('Negocio:reserva_crud')   
+        return redirect('Negocio:reserva_crud')  
+
+
+class CategoriaCRUDView(TemplateView):
+    template_name = 'categoria_crud.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categorias'] = Categoria.objects.all()
+        return context
+    
+
+class CategoriaCrearView(CreateView):
+    model = Categoria
+    form_class = CategoriaForm
+    template_name = 'categoriaCrear.html'
+    success_url = reverse_lazy('Negocio:categoria_crud')
+
+class CategoriaEditarView(UpdateView):
+    model = Categoria
+    form_class = CategoriaForm
+    template_name = 'categoriaEditar.html'
+    success_url = reverse_lazy('Negocio:categoria_crud')
+
+class CategoriaEliminarView(View):
+    def post(self, request, pk, *args, **kwargs):
+        categoria = get_object_or_404(Categoria, pk=pk)
+        categoria.delete()
+        return redirect('Negocio:categoria_crud')

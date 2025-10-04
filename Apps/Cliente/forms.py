@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cliente, Producto, Reserva
+from .models import Categoria, Cliente, Producto, Reserva
 
 class ClienteForm(forms.ModelForm):
     
@@ -37,3 +37,8 @@ class ReservaForm(forms.ModelForm):
             'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'hora': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
         }
+
+class CategoriaForm(forms.ModelForm):
+    class Meta:
+        model = Categoria
+        fields = ['nombre']

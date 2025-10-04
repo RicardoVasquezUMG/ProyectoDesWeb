@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
-from Apps.Negocio.views import ProductoCRUDView, ProductoCrearView, ProductoEditarView, ProductoView, ProductoEliminarView, ReservaCRUDView, ReservaCrearView, ReservaEliminarView, ReservaEditarView
+from Apps.Negocio.views import CategoriaCrearView, CategoriaEditarView, CategoriaEliminarView, ProductoCRUDView, ProductoCrearView, ProductoEditarView, ProductoView, ProductoEliminarView, ReservaCRUDView, ReservaCrearView, ReservaEliminarView, ReservaEditarView
+from Apps.Negocio.views import CategoriaCRUDView
 
 app_name='Negocio'
 urlpatterns = [
@@ -13,5 +14,9 @@ urlpatterns = [
     path('CRUDreserva/', ReservaCRUDView.as_view(), name='reserva_crud'),
     path('CRUDreserva/<int:pk>/editar/', ReservaEditarView.as_view(), name='reserva_editar'),
     path('CRUDreserva/crear/', ReservaCrearView.as_view(), name='reserva_crear'),
-    path('CRUDreserva/<int:pk>/eliminar/', ReservaEliminarView.as_view(), name='reserva_eliminar'), 
+    path('CRUDreserva/<int:pk>/eliminar/', ReservaEliminarView.as_view(), name='reserva_eliminar'),
+    path('CRUDcategoria/', CategoriaCRUDView.as_view(), name='categoria_crud'),
+    path('CRUDcategoria/crear/', CategoriaCrearView.as_view(), name='categoria_crear'),
+    path('CRUDcategoria/<int:pk>/editar/', CategoriaEditarView.as_view(), name='categoria_editar'),
+    path('CRUDcategoria/<int:pk>/eliminar/', CategoriaEliminarView.as_view(), name='categoria_eliminar'),
 ]
