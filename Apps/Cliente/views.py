@@ -43,7 +43,11 @@ class MenuView(TemplateView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		context['productos'] = Producto.objects.all()
+		categoria_id = self.request.GET.get('categoria')
+		if categoria_id:
+			context['productos'] = Producto.objects.filter(categoria_id=categoria_id)
+		else:
+			context['productos'] = Producto.objects.all()
 		context['categorias'] = Categoria.objects.all()
 		return context
 

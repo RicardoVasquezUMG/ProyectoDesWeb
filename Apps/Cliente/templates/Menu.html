@@ -25,10 +25,15 @@
             <div class="product-categories-widget widget-item">
               <h3 class="widget-title">Categorias</h3>
               <ul class="category-tree list-unstyled mb-0">
+                <li class="category-item">
+                  <div class="d-flex justify-content-between align-items-center category-header">
+                    <a href="?" class="category-link">Todos</a>
+                  </div>
+                </li>
                 {% for categoria in categorias %}
                 <li class="category-item">
                   <div class="d-flex justify-content-between align-items-center category-header">
-                    <a href="#" class="category-link">{{ categoria.nombre }}</a>
+                    <a href="?categoria={{ categoria.id }}" class="category-link">{{ categoria.nombre }}</a>
                   </div>
                 </li>
                 {% empty %}
@@ -44,69 +49,19 @@
         </div>
 
         <div class="col-lg-8">
-
-          <!-- Category Header Section -->
-          <section id="category-header" class="category-header section">
-
-            <div class="container" data-aos="fade-up">
-
-              <!-- Filter and Sort Options -->
-              <div class="filter-container mb-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="row g-3">
-                  <div class="col-12 col-md-6 col-lg-2">
-                    <div class="filter-item">
-                      <label for="priceRange" class="form-label">Price Range</label>
-                      <select class="form-select" id="priceRange">
-                        <option selected="">All Prices</option>
-                        <option>Under $25</option>
-                        <option>$25 to $50</option>
-                        <option>$50 to $100</option>
-                        <option>$100 to $200</option>
-                        <option>$200 &amp; Above</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="col-12 col-md-6 col-lg-2">
-                    <div class="filter-item">
-                      <label for="sortBy" class="form-label">Sort By</label>
-                      <select class="form-select" id="sortBy">
-                        <option selected="">Featured</option>
-                        <option>Price: Low to High</option>
-                        <option>Price: High to Low</option>
-                        <option>Customer Rating</option>
-                        <option>Newest Arrivals</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row mt-3">
-                  <div class="col-12" data-aos="fade-up" data-aos-delay="200">
-                    <div class="active-filters">
-                      <span class="active-filter-label">Active Filters:</span>
-                      <div class="filter-tags">
-                        <span class="filter-tag">
-                          Electronics <button class="filter-remove"><i class="bi bi-x"></i></button>
-                        </span>
-                        <span class="filter-tag">
-                          $50 to $100 <button class="filter-remove"><i class="bi bi-x"></i></button>
-                        </span>
-                        <button class="clear-all-btn">Clear All</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-
-          </section><!-- /Category Header Section -->
-
           <!-- Category Product List Section -->
+          <br>
           <section id="category-product-list" class="category-product-list section">
             <div class="container" data-aos="fade-up" data-aos-delay="100">
+              {% if request.GET.categoria %}
+                {% for cat in categorias %}
+                  {% if cat.id|stringformat:"s" == request.GET.categoria %}
+                    <h5 class="mb-4">Filtrando por categoría: <strong>{{ cat.nombre }}</strong></h5>
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                <h5 class="mb-4">Mostrando todos los productos</h5>
+              {% endif %}
               <div class="row g-4">
                 {% for producto in productos %}
                 <div class="col-6 col-xl-4">
