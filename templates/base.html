@@ -43,15 +43,13 @@
 
           <!-- Logo -->
           <a href={% url 'Home:homeapp' %} class="logo d-flex align-items-center">
-            <!-- Uncomment the line below if you also wish to use an image logo -->
-            <!-- <img src="assets/img/logo.webp" alt=""> -->
             <h1 class="sitename">{{ company_name }}</h1>
           </a>
 
           <!-- Search -->
-          <form class="search-form desktop-search-form">
+          <form class="search-form desktop-search-form" method="get" action="{% url 'Home:search_results' %}">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="Buscar  producto">
+              <input type="text" class="form-control" name="dato" placeholder="Buscar  producto" value="{{ request.GET.dato }}">
               <button class="btn" type="submit">
                 <i class="bi bi-search"></i>
               </button>
