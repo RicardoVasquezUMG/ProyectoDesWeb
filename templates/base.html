@@ -85,18 +85,20 @@
                     <i class="bi bi-bag-check me-2"></i>
                     <span>Mis Ordenes</span>
                   </a>
-                  <a class="dropdown-item d-flex align-items-center" href={% url 'Negocio:producto_crud' %}>
-                    <i class="bi bi-gear me-2"></i>
-                    CRUD Productos
-                  </a>
-                  <a class="dropdown-item d-flex align-items-center" href={% url 'Negocio:reserva_crud' %}>
-                    <i class="bi bi-gear me-2"></i>
-                    CRUD Reservas
-                  </a>
-                  <a class="dropdown-item d-flex align-items-center" href={% url 'Negocio:categoria_crud' %}>
-                    <i class="bi bi-gear me-2"></i>
-                    CRUD Categorias
-                  </a>
+                  {% if user.is_authenticated and user.groups.all.0.name == 'Personal' %}
+                    <a class="dropdown-item d-flex align-items-center" href={% url 'Negocio:producto_crud' %}>
+                      <i class="bi bi-gear me-2"></i>
+                      CRUD Productos
+                    </a>
+                    <a class="dropdown-item d-flex align-items-center" href={% url 'Negocio:reserva_crud' %}>
+                      <i class="bi bi-gear me-2"></i>
+                      CRUD Reservas
+                    </a>
+                    <a class="dropdown-item d-flex align-items-center" href={% url 'Negocio:categoria_crud' %}>
+                      <i class="bi bi-gear me-2"></i>
+                      CRUD Categorias
+                    </a>
+                  {% endif %}
 
                   
                   <a class="dropdown-item d-flex align-items-center" href="account.html">
@@ -109,14 +111,14 @@
                   </a>
                 </div>
                 <div class="dropdown-footer">
-                  {% if not request.session.cliente_id %}
-                    <a href="{% url 'Cliente:registrarCliente' %}" class="btn btn-primary w-100 mb-2">Registrar</a>
-                    <a href="{% url 'Cliente:loginapp' %}" class="btn btn-outline-primary w-100">Iniciar Sesion</a>
-                  {% else %}
+                  {% if user.is_authenticated %}
                     <form method="post" action="{% url 'Cliente:logout' %}">
                       {% csrf_token %}
                       <button type="submit" class="btn btn-danger w-100">Cerrar Sesión</button>
                     </form>
+                  {% else %}
+                    <a href="{% url 'Cliente:registrarCliente' %}" class="btn btn-primary w-100 mb-2">Registrar</a>
+                    <a href="{% url 'Cliente:loginapp' %}" class="btn btn-outline-primary w-100">Iniciar Sesion</a>
                   {% endif %}
                 </div>
               </div>
@@ -145,7 +147,7 @@
             <li><a href={% url 'Cliente:menu' %}>Menu</a></li>
             <li><a href={% url 'Cliente:reserva' %}>Reserva</a></li>
             <li><a href={% url 'Home:acerca_app' %}>Acerca de </a></li>
-            <li><a href="contact.html">Contacto</a></li>
+            <li><a href={% url 'Home:soporte_app' %}>Soporte</a></li>
             
             <!-- <li><a href="checkout.html">Checkout</a></li>
             <li><a href="product-details.html">Product Details</a></li>

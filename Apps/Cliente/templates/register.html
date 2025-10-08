@@ -50,10 +50,34 @@
                         {{ form.email|add_class:"form-control"|attr:"placeholder:Correo Electrónico"|attr:"autocomplete:email"|attr:"required" }}
                         <label for="{{ form.email.id_for_label }}">Correo Electrónico</label>
                       </div>
-                      <div class="form-floating mb-3">
-                        {{ form.contrasena|add_class:"form-control"|attr:"placeholder:Contraseña"|attr:"autocomplete:new-password"|attr:"required"|attr:"minlength:8" }}
-                        <label for="{{ form.contrasena.id_for_label }}">Contraseña</label>
+                      <div class="form-floating mb-3 position-relative">
+                        {{ form.password1|add_class:"form-control"|attr:"placeholder:Contraseña"|attr:"autocomplete:new-password"|attr:"required"|attr:"minlength:8"|attr:"id:register-password1" }}
+                        <label for="{{ form.password1.id_for_label }}">Contraseña</label>
+                        <span class="password-toggle" style="position:absolute;top:12px;right:16px;cursor:pointer;" onclick="togglePassword('register-password1', this)">
+                          <i class="bi bi-eye"></i>
+                        </span>
                       </div>
+                      <div class="form-floating mb-3 position-relative">
+                        {{ form.password2|add_class:"form-control"|attr:"placeholder:Confirmar contraseña"|attr:"autocomplete:new-password"|attr:"required"|attr:"minlength:8"|attr:"id:register-password2" }}
+                        <label for="{{ form.password2.id_for_label }}">Confirmar contraseña</label>
+                        <span class="password-toggle" style="position:absolute;top:12px;right:16px;cursor:pointer;" onclick="togglePassword('register-password2', this)">
+                          <i class="bi bi-eye"></i>
+                        </span>
+                      </div>
+<script>
+function togglePassword(inputId, toggleElem) {
+  var input = document.getElementById(inputId);
+  if (input.type === "password") {
+    input.type = "text";
+    toggleElem.querySelector('i').classList.remove('bi-eye');
+    toggleElem.querySelector('i').classList.add('bi-eye-slash');
+  } else {
+    input.type = "password";
+    toggleElem.querySelector('i').classList.remove('bi-eye-slash');
+    toggleElem.querySelector('i').classList.add('bi-eye');
+  }
+}
+</script>
                       <div class="d-grid mb-4">
                         <button type="submit" class="btn btn-register">Crear Cuenta</button>
                       </div>

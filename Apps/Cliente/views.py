@@ -7,35 +7,19 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from .forms import ClienteForm, ReservaForm
 from .models import Cliente, Producto, Categoria, Reserva
+from django.contrib.auth.views import LoginView
 
-def LoginView(request):
-	error_message = None
-	if request.method == 'POST':
-		email = request.POST.get('email')
-		contrasena = request.POST.get('contrasena')
-		try:
-			cliente = Cliente.objects.get(email=email)
-			if cliente.contrasena == contrasena:
-				request.session['cliente_id'] = cliente.id
-				request.session['cliente_nombre'] = cliente.nombre
-				return redirect('Home:homeapp')
-			else:
-				error_message = 'Contraseña incorrecta.'
-		except Cliente.DoesNotExist:
-			error_message = 'El correo no está registrado.'
-	return render(request, 'login.html', {'error_message': error_message})
 
-def logout_cliente(request):
-	if request.method == 'POST':
-		request.session.flush()
-		return redirect('Cliente:loginapp')
-	return redirect('Home:homeapp')
+class RegistroView(CreateView):
+    template_name = 'register.html'
+    model = Cliente
+    form_class = ClienteForm
+    success_url = reverse_lazy('Cliente:loginapp')
 
-class CrearClienteView(CreateView):
-	model = Cliente
-	template_name = 'register.html'
-	form_class = ClienteForm
-	success_url = reverse_lazy('Cliente:loginapp')
+class LoginView(LoginView):
+	template_name = 'login.html'
+	success_url = reverse_lazy('Home:homeapp')
+	2
 
 
 class MenuView(TemplateView):

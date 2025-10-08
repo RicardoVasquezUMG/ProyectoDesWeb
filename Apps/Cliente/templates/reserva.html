@@ -15,37 +15,44 @@
                 <h3><strong>Reserva tu mesa hoy</strong></h3>
                 <p>Disfruta de una experiencia gastronómica única. Reserva tu mesa con nosotros y asegura tu lugar para compartir momentos especiales con quienes más quieres.</p></div>
 
-              <form method="post" class="php-email-form">
-                {% csrf_token %}
-                <div class="row g-3">
-                  <div class="col-12 form-group">
-                    {{ form.fecha.label_tag }}
-                    {{ form.fecha }}
+              {% if user.is_authenticated %}
+                <form method="post" class="php-email-form">
+                  {% csrf_token %}
+                  <div class="row g-3">
+                    <div class="col-12 form-group">
+                      {{ form.fecha.label_tag }}
+                      {{ form.fecha }}
+                    </div>
+                    <div class="col-12 form-group">
+                      {{ form.hora.label_tag }}
+                      {{ form.hora }}
+                    </div>
+                    <div class="col-12 form-group">
+                      {{ form.numero_personas.label_tag }}
+                      {{ form.numero_personas }}
+                    </div>
+                    <div class="col-12 form-group">
+                      {{ form.comentarios.label_tag }}
+                      {{ form.comentarios }}
+                    </div>
                   </div>
-                  <div class="col-12 form-group">
-                    {{ form.hora.label_tag }}
-                    {{ form.hora }}
+                  {% if form.errors %}
+                    <div class="my-3">
+                      <div class="error-message">Por favor corrige los errores en el formulario.</div>
+                    </div>
+                  {% endif %}
+                  <div class="text-center mt-4 mb-4">
+                    <button type="submit" class="btn-book-table rounded border-0 px-5 py-3 fs-5" style="background-color: RGB(255, 102, 0); color: #fff; margin-bottom: 50px; box-shadow: none; font-size: 1.5rem;">
+                    Confirmar Reserva
+                    </button>
                   </div>
-                  <div class="col-12 form-group">
-                    {{ form.numero_personas.label_tag }}
-                    {{ form.numero_personas }}
-                  </div>
-                  <div class="col-12 form-group">
-                    {{ form.comentarios.label_tag }}
-                    {{ form.comentarios }}
-                  </div>
+                </form>
+              {% else %}
+                <div class="alert alert-warning mt-4 mb-4">
+                  Debes iniciar sesión para enviar un formulario de reserva.<br>
+                  <a href="{% url 'Cliente:loginapp' %}" class="btn btn-primary mt-2">Ir a Iniciar Sesión</a>
                 </div>
-                {% if form.errors %}
-                  <div class="my-3">
-                    <div class="error-message">Por favor corrige los errores en el formulario.</div>
-                  </div>
-                {% endif %}
-                <div class="text-center mt-4 mb-4">
-                  <button type="submit" class="btn-book-table rounded border-0 px-5 py-3 fs-5" style="background-color: RGB(255, 102, 0); color: #fff; margin-bottom: 50px; box-shadow: none; font-size: 1.5rem;">
-                  Confirmar Reserva
-                  </button>
-                </div>
-              </form>
+              {% endif %}
             </div>
           </div>
 

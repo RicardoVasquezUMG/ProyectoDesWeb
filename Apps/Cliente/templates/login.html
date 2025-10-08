@@ -17,6 +17,7 @@
               </div>
 
               <form class="auth-form-content" method="post" action="">
+                <input type="hidden" name="next" value="{{ next|default:'/home/' }}">
                 {% csrf_token %}
                 {% if form.errors or error_message %}
                   <div class="alert alert-danger">
@@ -34,17 +35,31 @@
                   <span class="input-icon">
                     <i class="bi bi-envelope"></i>
                   </span>
-                  <input type="email" name="email" class="form-control" placeholder="Email address" required autocomplete="email">
+                  <input type="email" name="username" class="form-control" placeholder="Email" required autocomplete="username">
                 </div>
 
                 <div class="input-group mb-3">
                   <span class="input-icon">
                     <i class="bi bi-lock"></i>
                   </span>
-                  <input type="password" name="contrasena" class="form-control" placeholder="Password" required autocomplete="current-password">
-                  <span class="password-toggle">
+                  <input type="password" name="password" class="form-control" placeholder="Contraseña" required autocomplete="current-password" id="login-password">
+                  <span class="password-toggle" onclick="togglePassword('login-password', this)">
                     <i class="bi bi-eye"></i>
                   </span>
+<script>
+function togglePassword(inputId, toggleElem) {
+  var input = document.getElementById(inputId);
+  if (input.type === "password") {
+    input.type = "text";
+    toggleElem.querySelector('i').classList.remove('bi-eye');
+    toggleElem.querySelector('i').classList.add('bi-eye-slash');
+  } else {
+    input.type = "password";
+    toggleElem.querySelector('i').classList.remove('bi-eye-slash');
+    toggleElem.querySelector('i').classList.add('bi-eye');
+  }
+}
+</script>
                 </div>
 
                 <div class="form-options mb-4">

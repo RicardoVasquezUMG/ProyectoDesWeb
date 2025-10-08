@@ -19,5 +19,7 @@ class SearchResultsView(TemplateView):
         else:
             context['results'] = Producto.objects.all()
         return context
-        
+
+class SoporteView(TemplateView):
+    template_name = 'soporte.html'        
  
