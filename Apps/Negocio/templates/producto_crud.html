@@ -16,6 +16,7 @@
       </div>
     </div><!-- End Page Title -->
 
+
     <!-- Cart Section -->
     <section id="cart" class="cart section" style="padding-top: 1.5rem !important; padding-bottom: 1.5rem !important;">
       <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -25,8 +26,36 @@
               <h2>Nuevo Producto</h2>
               <a href="{% url 'Negocio:producto_crear' %}" class="btn btn-primary mb-3">Agregar Producto</a>
             </div>
+            <!-- Categorías para filtrar -->
+            <div class="product-categories-widget widget-item mt-4">
+              <h3 class="widget-title">Categorías</h3>
+              <ul class="category-tree list-unstyled mb-0">
+                <li class="category-item">
+                  <a href="?" class="category-link">Todos</a>
+                </li>
+                {% for categoria in categorias %}
+                <li class="category-item">
+                  <a href="?categoria={{ categoria.id }}" class="category-link">{{ categoria.nombre }}</a>
+                </li>
+                {% empty %}
+                <li class="category-item">
+                  <span class="text-muted">No hay categorías disponibles.</span>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
           </div>
           <div class="col-lg-9 col-md-8" data-aos="fade-up" data-aos-delay="200">
+            <!-- Mensaje de filtrado -->
+            {% if request.GET.categoria %}
+              {% for cat in categorias %}
+                {% if cat.id|stringformat:"s" == request.GET.categoria %}
+                  <h5 class="mb-4">Filtrando por categoría: <strong>{{ cat.nombre }}</strong></h5>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <h5 class="mb-4">Mostrando todos los productos</h5>
+            {% endif %}
             <div class="cart-items">
               <div class="cart-header d-none d-lg-block">
                 <div class="row align-items-center">
@@ -48,7 +77,6 @@
                 </div>
               </div>
 
-
               {% for producto in productos %}
               <div class="cart-item">
                 <div class="row align-items-center">
@@ -62,7 +90,6 @@
                         <div class="product-meta">
                           <span class="product-color">{{ producto.descripcion|truncatechars:25 }}</span>
                         </div>
-                        
                       </div>
                     </div>
                   </div>
@@ -77,7 +104,6 @@
                   <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
                     <span>{{ producto.stock }}</span>
                   </div>
-                  
                   <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
                     <div class="item-actions d-flex justify-content-center gap-1">
                       <a href="{% url 'Negocio:producto_editar' producto.id %}" class="btn btn-primary btn-sm">Editar</a>
@@ -88,20 +114,15 @@
                       <a href="{% url 'Negocio:producto_ver' producto.id %}" class="btn btn-success btn-sm">Ver</a>
                     </div>
                   </div>
-                  
                 </div>
               </div>
+              {% empty %}
+              <p>No hay productos disponibles.</p>
               {% endfor %}
-
-              
             </div>
           </div>
-
-          
         </div>
-
       </div>
-
     </section><!-- /Cart Section -->
 
   </main>

@@ -11,7 +11,14 @@ class ProductoCRUDView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['productos'] = Producto.objects.all()
+        request = self.request
+        categoria_id = request.GET.get('categoria')
+        if categoria_id:
+            productos = Producto.objects.filter(categoria_id=categoria_id)
+        else:
+            productos = Producto.objects.all()
+        context['productos'] = productos
+        context['categorias'] = Categoria.objects.all()
         return context
 
 class ProductoView(TemplateView):
@@ -57,7 +64,8 @@ class ReservaCRUDView(TemplateView):
 
 class ReservaEditarView(UpdateView):
     model = Reserva
-    form_class = ReservaForm
+    from Apps.Negocio.forms import ReservaEstadoForm
+    form_class = ReservaEstadoForm
     template_name = 'reservaEditar.html'
     success_url = reverse_lazy('Negocio:reserva_crud')
 
@@ -67,6 +75,20 @@ class ReservaCrearView(CreateView):
     form_class = ReservaForm
     template_name = 'reservaCrear.html'
     success_url = reverse_lazy('Negocio:reserva_crud')
+
+    def form_valid(self, form):
+        reserva = form.save(commit=False)
+        # Asignar el cliente automáticamente usando el usuario autenticado
+        from Apps.Cliente.models import Cliente
+        try:
+            cliente = Cliente.objects.get(perfil=self.request.user)
+            reserva.cliente = cliente
+        except Cliente.DoesNotExist:
+            from django.contrib import messages
+            messages.error(self.request, "No se encontró el cliente asociado al usuario.")
+            return redirect('Cliente:loginapp')
+        reserva.save()
+        return redirect(self.success_url)
 
 class ReservaEliminarView(View):
     def post(self, request, pk, *args, **kwargs):

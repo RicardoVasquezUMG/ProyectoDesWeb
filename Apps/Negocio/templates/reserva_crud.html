@@ -19,22 +19,24 @@
     <!-- Reservas Section -->
     <section id="reservas" class="cart section" style="padding-top: 1.5rem !important; padding-bottom: 1.5rem !important;">
       <div class="container" data-aos="fade-up" data-aos-delay="100">
-        <div class="row align-items-start">
+        <div class="row">
           <div class="col-lg-3 col-md-4 mb-4">
             <div class="ms-0">
               <h2>Nueva Reserva</h2>
-               <a href="{% url 'Negocio:reserva_crear' %}" class="btn btn-primary mb-3">Agregar Reserva</a>
+              <a href="{% url 'Negocio:reserva_crear' %}" class="btn btn-primary mb-3">Agregar Reserva</a>
             </div>
           </div>
-          <div class="col-lg-9 col-md-8" data-aos="fade-up" data-aos-delay="200">
+        </div>
+        <div class="row">
+          <div class="col-12" data-aos="fade-up" data-aos-delay="200">
             <div class="cart-items">
               <div class="cart-header d-none d-lg-block">
                 <div class="row align-items-center">
                   <div class="col-lg-2"><h5>Cliente</h5></div>
                   <div class="col-lg-2 text-center"><h5>Fecha</h5></div>
-                  <div class="col-lg-2 text-center"><h5>Hora</h5></div>
                   <div class="col-lg-2 text-center"><h5>Personas</h5></div>
                   <div class="col-lg-2 text-center"><h5>Estado</h5></div>
+                  <div class="col-lg-2 text-center"><h5>Comentario</h5></div>
                   <div class="col-lg-2 text-center"><h5>Acciones</h5></div>
                 </div>
               </div>
@@ -43,20 +45,23 @@
                 <div class="row align-items-center">
                   <div class="col-lg-2 col-12 mt-3 mt-lg-0 mb-lg-0 mb-3">
                     <div class="product-details">
-                      <h6 class="product-title">{{ reserva.cliente.nombre }} {{ reserva.cliente.apellido }}</h6>
+                      <h6 class="product-title">{{ reserva.cliente.perfil.first_name }} {{ reserva.cliente.perfil.last_name }}</h6>
                     </div>
                   </div>
                   <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
-                    <span>{{ reserva.fecha }}</span>
-                  </div>
-                  <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
-                    <span>{{ reserva.hora|time:"H:i" }}</span>
+                    <div>
+                      <div>{{ reserva.fecha|date:"d/m/Y" }}</div>
+                      <div class="text-muted">{{ reserva.hora|time:"H:i" }}</div>
+                    </div>
                   </div>
                   <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
                     <span>{{ reserva.numero_personas }}</span>
                   </div>
                   <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
                     <span>{{ reserva.get_estado_display }}</span>
+                  </div>
+                  <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
+                    <span>{{ reserva.comentarios }}</span>
                   </div>
                   <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
                     <div class="item-actions d-flex justify-content-center gap-1">

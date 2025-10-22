@@ -16,7 +16,7 @@
                 <p>Disfruta de una experiencia gastronómica única. Reserva tu mesa con nosotros y asegura tu lugar para compartir momentos especiales con quienes más quieres.</p></div>
 
               {% if user.is_authenticated %}
-                <form method="post" class="php-email-form">
+                <form method="post">
                   {% csrf_token %}
                   <div class="row g-3">
                     <div class="col-12 form-group">

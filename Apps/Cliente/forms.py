@@ -1,5 +1,5 @@
 from django import forms
-from .models import Categoria, Cliente, Producto, Reserva
+from .models import Categoria, Cliente, Direccion, Producto, Reserva
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -34,13 +34,11 @@ class ProductoForm(forms.ModelForm):
 class ReservaForm(forms.ModelForm):
     class Meta:
         model = Reserva
-        fields = ['cliente', 'fecha', 'hora', 'numero_personas', 'estado', 'comentarios']
+        fields = ['fecha', 'hora', 'numero_personas', 'comentarios']
         widgets = {
-            'cliente': forms.Select(attrs={'class': 'form-control'}),
             'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'hora': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
             'numero_personas': forms.NumberInput(attrs={'class': 'form-control', 'min': 1, 'max': 7}),
-            'estado': forms.Select(attrs={'class': 'form-control'}),
             'comentarios': forms.Textarea(attrs={'class': 'form-control', 'rows': 2}),
         }
 
@@ -49,12 +47,22 @@ class ReservaForm(forms.ModelForm):
         if numero < 1 or numero > 7:
             raise forms.ValidationError('El número de personas debe ser entre 1 y 7.')
         return numero
-        widgets = {
-            'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'hora': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
-        }
+        # ...existing code...
 
 class CategoriaForm(forms.ModelForm):
     class Meta:
         model = Categoria
         fields = ['nombre']
+
+class DireccionForm(forms.ModelForm):
+    class Meta:
+        model = Direccion
+        exclude = ['cliente']
+        widgets = {
+            'direccion_linea1': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Dirección principal'}),
+            'direccion_linea2': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Dirección secundaria (opcional)'}),
+            'Colonia': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Colonia'}),
+            'telefono': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Teléfono'}),
+            'etiqueta': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Etiqueta (ej. Casa, Oficina)'}),
+            'entrega': forms.Select(attrs={'class': 'form-control'}),
+        }
