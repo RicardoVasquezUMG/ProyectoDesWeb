@@ -1,6 +1,6 @@
-from django.views.generic import UpdateView, DeleteView
-
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.views.decorators.http import require_POST
 from django.views.generic import CreateView, TemplateView
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -10,7 +10,12 @@ from django.utils.decorators import method_decorator
 from .forms import ClienteForm, ReservaForm, DireccionForm
 from .models import Cliente, Producto, Categoria, Reserva, Direccion
 from django.contrib.auth.views import LoginView
-
+from django.views.generic import UpdateView, DeleteView
+from Apps.Negocio.models import Pedido, PedidoDetalle
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.urls import reverse
 
 class RegistroView(CreateView):
     template_name = 'register.html'
@@ -21,7 +26,9 @@ class RegistroView(CreateView):
 class LoginView(LoginView):
 	template_name = 'login.html'
 	success_url = reverse_lazy('Home:homeapp')
-	2
+
+	def form_invalid(self, form):
+		return self.render_to_response(self.get_context_data(form=form, error_message="Usuario o contraseña incorrectos."))
 
 
 class MenuView(TemplateView):
@@ -125,6 +132,15 @@ class CrearDireccionView(CreateView):
 		direccion.save()
 		messages.success(self.request, "Dirección creada exitosamente.")
 		return redirect(self.success_url)
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		try:
+			cliente = Cliente.objects.get(perfil=self.request.user)
+			context['cliente'] = cliente
+		except Cliente.DoesNotExist:
+			context['cliente'] = None
+		return context
 	
 # Vista para editar dirección
 class EditarDireccionView(UpdateView):
@@ -154,3 +170,173 @@ class EliminarDireccionView(DeleteView):
 	def delete(self, request, *args, **kwargs):
 		messages.success(self.request, "Dirección eliminada exitosamente.")
 		return super().delete(request, *args, **kwargs)
+
+class ReservaView(TemplateView):
+	model = Reserva
+	template_name = 'reservaView.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		try:
+			cliente = Cliente.objects.get(perfil=self.request.user)
+			context['cliente'] = cliente
+			context['reservas'] = Reserva.objects.filter(cliente=cliente).order_by('-creacion')
+		except Cliente.DoesNotExist:
+			context['error_message'] = "No se encontró el cliente asociado al usuario."
+		return context
+	
+
+# --- Carrito en sesión ---
+
+@require_POST
+def agregar_al_carrito(request, producto_id):
+	producto = Producto.objects.get(id=producto_id)
+	carrito = request.session.get('carrito', {})
+	cantidad = int(request.POST.get('cantidad', 1))
+	if cantidad <= 0:
+		return redirect('Cliente:carrito')
+	if str(producto_id) in carrito:
+		carrito[str(producto_id)]['cantidad'] += cantidad
+	else:
+		carrito[str(producto_id)] = {
+			'id': producto.id,
+			'nombre': producto.nombre,
+			'precio': float(producto.precio),
+			'cantidad': cantidad,
+			'imagen': producto.imagen,
+			'color': getattr(producto, 'color', ''),
+			'size': getattr(producto, 'size', '')
+		}
+	# Actualizar la cantidad total de productos en el carrito
+	carrito_cantidad = sum(item['cantidad'] for item in carrito.values())
+	request.session['carrito'] = carrito
+	request.session['carrito_cantidad'] = carrito_cantidad
+	request.session.modified = True
+	return redirect('Cliente:carrito')
+
+@require_POST
+def quitar_del_carrito(request, producto_id):
+	carrito = request.session.get('carrito', {})
+	producto_key = str(producto_id)
+	if producto_key in carrito:
+		if request.POST.get('delete') == '1':
+			carrito.pop(producto_key, None)
+		else:
+			nueva_cantidad = int(request.POST.get('cantidad', carrito[producto_key]['cantidad'] - 1))
+			if nueva_cantidad <= 0:
+				carrito.pop(producto_key, None)
+			else:
+				carrito[producto_key]['cantidad'] = nueva_cantidad
+	# Actualizar la cantidad total de productos en el carrito
+	carrito_cantidad = sum(item['cantidad'] for item in carrito.values())
+	request.session['carrito'] = carrito
+	request.session['carrito_cantidad'] = carrito_cantidad
+	request.session.modified = True
+	return redirect('Cliente:carrito')
+
+
+
+class CarritoView(TemplateView):
+	template_name = 'carrito.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		carrito = self.request.session.get('carrito', {})
+		productos = []
+		total = 0
+		for key, item in carrito.items():
+			producto_id = item.get('id') or key
+			subtotal = item['precio'] * item['cantidad']
+			total += subtotal
+			productos.append({
+				'id': producto_id,
+				'nombre': item['nombre'],
+				'precio': item['precio'],
+				'cantidad': item['cantidad'],
+				'imagen': item.get('imagen', ''),
+				'color': item.get('color', ''),
+				'size': item.get('size', ''),
+				'subtotal': subtotal
+			})
+		context['productos'] = productos
+		context['total'] = total
+		return context
+	
+
+@login_required
+def formulario_pedido(request):
+	cliente = Cliente.objects.get(perfil=request.user)
+	direcciones = Direccion.objects.filter(cliente=cliente)
+	carrito = request.session.get('carrito', {})
+	productos = []
+	total = 0
+	for key, item in carrito.items():
+		subtotal = item['precio'] * item['cantidad']
+		total += subtotal
+		productos.append(item)
+
+	if request.method == 'POST':
+		retiro_tienda = request.POST.get('retiro_tienda') == 'true'
+		direccion_id = request.POST.get('direccion') if not retiro_tienda else None
+		comentario = request.POST.get('comentario', '')
+		direccion_obj = Direccion.objects.get(id=direccion_id) if direccion_id else None
+		pedido = Pedido.objects.create(
+			cliente=cliente,
+			envio=not retiro_tienda,
+			estado='pendiente',
+			direccion_envio=direccion_obj,
+			comentarios=comentario
+		)
+		for item in productos:
+			producto_obj = Producto.objects.get(id=item['id'])
+			PedidoDetalle.objects.create(
+				pedido=pedido,
+				producto=producto_obj,
+				cantidad=item['cantidad']
+			)
+		# Limpiar carrito
+		request.session['carrito'] = {}
+		request.session['carrito_cantidad'] = 0
+		request.session.modified = True
+		return redirect(reverse('Negocio:pedido_ver', args=[pedido.id]))
+
+	return render(request, 'pedido_formulario.html', {
+		'direcciones': direcciones,
+		'productos': productos,
+		'total': total
+	})
+
+class OrdenesView(TemplateView):
+	template_name = 'ordenesGeneral.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		cliente = Cliente.objects.get(perfil=self.request.user)
+		pedidos = Pedido.objects.filter(cliente=cliente).order_by('-fecha')
+		context['pedidos'] = pedidos
+		return context
+	
+class OrdenesVerView(TemplateView):
+	template_name = 'ordenesVer.html'
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		pedido_id = self.kwargs.get('pedido_id')
+		try:
+			pedido = Pedido.objects.get(id=pedido_id)
+			detalles = PedidoDetalle.objects.filter(pedido=pedido)
+			subtotal = sum(float(d.producto.precio) * d.cantidad for d in detalles)
+			if pedido.envio:
+				envio = 0 if subtotal > 75 else 25
+			else:
+				envio = 0
+			total = subtotal + envio
+			context['pedido'] = pedido
+			context['detalles'] = detalles
+			context['cliente'] = pedido.cliente
+			context['subtotal'] = subtotal
+			context['envio'] = envio
+			context['total'] = total
+		except Pedido.DoesNotExist:
+			context['error_message'] = 'Pedido no encontrado.'
+		return context

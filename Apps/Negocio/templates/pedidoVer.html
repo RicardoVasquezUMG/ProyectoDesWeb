@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block contenido %}
+<main class="main">
+    <div class="container mt-4">
+        <h2>Detalle del Pedido</h2>
+        <div class="card">
+            <div class="card-body">
+                <p><strong>ID:</strong> {{ pedido.id }}</p>
+                <p><strong>Cliente:</strong> {{ pedido.cliente.perfil.get_full_name|default:pedido.cliente.perfil.username }}</p>
+                <p><strong>Fecha:</strong> {{ pedido.fecha }}</p>
+                <p><strong>Estado:</strong> {{ pedido.estado }}</p>
+                <p><strong>Envío:</strong> {% if pedido.envio %}Sí{% else %}No{% endif %}</p>
+                <p><strong>Dirección:</strong> {{ pedido.direccion_envio }}</p>
+                <p><strong>Comentarios:</strong> {{ pedido.comentarios }}</p>
+                <a href="{% url 'Negocio:pedido_editar' pedido.id %}" class="btn btn-warning">Editar</a>
+                <form method="post" action="{% url 'Negocio:pedido_eliminar' pedido.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+                <a href="{% url 'Negocio:pedido_crud' %}" class="btn btn-secondary">Volver</a>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

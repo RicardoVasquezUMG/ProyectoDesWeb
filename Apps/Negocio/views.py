@@ -1,9 +1,13 @@
+
 from django.shortcuts import render
 from django.views.generic import TemplateView, UpdateView, CreateView, View
 from django.shortcuts import redirect, get_object_or_404
 from Apps.Cliente.forms import ProductoForm, ReservaForm, CategoriaForm
 from Apps.Cliente.models import Producto, Reserva , Categoria
 from django.urls import reverse_lazy
+from .models import Pedido
+from .forms import PedidoForm
+
 
 # Create your views here.
 class ProductoCRUDView(TemplateView):
@@ -123,3 +127,45 @@ class CategoriaEliminarView(View):
         categoria = get_object_or_404(Categoria, pk=pk)
         categoria.delete()
         return redirect('Negocio:categoria_crud')
+
+class PedidoCRUDView(TemplateView):
+    template_name = 'pedidoCRUD.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from .models import Pedido
+        context['pedidos'] = Pedido.objects.all()
+        return context
+
+
+# Ver pedido
+class PedidoView(TemplateView):
+    template_name = 'pedidoVer.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pedido_id = self.kwargs.get('pk')
+        pedido = get_object_or_404(Pedido, pk=pedido_id)
+        context['pedido'] = pedido
+        return context
+
+# Editar pedido
+class PedidoEditarView(UpdateView):
+    model = Pedido
+    form_class = PedidoForm
+    template_name = 'pedidoEditar.html'
+    success_url = reverse_lazy('Negocio:pedido_crud')
+
+# Crear pedido
+class PedidoCrearView(CreateView):
+    model = Pedido
+    form_class = PedidoForm
+    template_name = 'pedidoCrear.html'
+    success_url = reverse_lazy('Negocio:pedido_crud')
+
+# Eliminar pedido
+class PedidoEliminarView(View):
+    def post(self, request, pk, *args, **kwargs):
+        pedido = get_object_or_404(Pedido, pk=pk)
+        pedido.delete()
+        return redirect('Negocio:pedido_crud')

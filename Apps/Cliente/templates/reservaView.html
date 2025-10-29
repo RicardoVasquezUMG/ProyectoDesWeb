@@ -1,0 +1,41 @@
+{% extends 'perfil.html' %}
+{% load static %}
+
+{% block perfil_contenido %}
+<main class="main">
+    <div class="section-header" data-aos="fade-up">
+        <h2>Mis Reservas</h2>
+        <div class="header-actions">
+            <a href="{% url 'Cliente:reserva' %}" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i>
+                Agregar Nueva Reserva
+            </a>
+        </div>
+    </div>
+
+    <div class="addresses-grid">
+        {% for reserva in reservas %}
+        <div class="address-card{% if forloop.first %} default{% endif %}" data-aos="fade-up" data-aos-delay="{{ forloop.counter|add:"00" }}">
+            <div class="card-header">
+                <h4>Reserva #{{ reserva.id }}</h4>
+            </div>
+            <div class="card-body">
+                <p class="address-text">
+                    Fecha: {{ reserva.fecha }}<br>
+                    Hora: {{ reserva.hora }}<br>
+                    Personas: {{ reserva.numero_personas }}<br>
+                    Estado: {{ reserva.estado }}<br>
+                    {% if reserva.comentarios %}Comentarios: {{ reserva.comentarios }}<br>{% endif %}
+                </p>
+                <div class="contact-info">
+                    <div><i class="bi bi-person"></i> {{ reserva.cliente.perfil.get_full_name|default:reserva.cliente.perfil.username }}</div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No tienes reservas registradas.</p>
+        {% endfor %}
+    </div>
+</main>
+
+{% endblock %}

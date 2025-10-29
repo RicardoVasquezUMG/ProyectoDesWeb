@@ -28,10 +28,12 @@
               <!-- User Info -->
               <div class="user-info" data-aos="fade-right">
                 <div class="user-avatar">
-                  <img src="{% static 'assets/img/person/person-f-1.webp' %}" alt="Profile" loading="lazy">
+                  <div class="user-avatar-icon" role="img" aria-label="Usuario">
+                    <i class="bi bi-person-circle" style="font-size:4rem; color:#6c757d;" aria-hidden="true"></i>
+                  </div>
                   <span class="status-badge"><i class="bi bi-shield-check"></i></span>
                 </div>
-                <h4>Sarah Anderson</h4>
+                <h4>{{ cliente.perfil.get_full_name|default:cliente.perfil.username }}</h4>
                 <div class="user-status">
                   <i class="bi bi-award"></i>
                   <span>Premium Member</span>
@@ -42,17 +44,17 @@
               <nav class="menu-nav">
                 <ul class="nav flex-column" role="tablist">
                   <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'Cliente:direcciones' %}">
+                    <a class="nav-link active" href="{% url 'Cliente:ordenes' %}">
                       <i class="bi bi-box-seam"></i>
                       <span>Mis Ordenes</span>
-                      <span class="badge">3</span>
+                      
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#reservas">
+                    <a class="nav-link" href="{% url 'Cliente:reservas' %}">
                       <i class="bi bi-heart"></i>
                       <span>Reservas</span>
-                      <span class="badge">12</span>
+                      
                     </a>
                   </li>
                   
@@ -63,7 +65,7 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#settings">
+                    <a class="nav-link"  href="#settings">
                       <i class="bi bi-gear"></i>
                       <span>Configuración de Cuenta</span>
                     </a>

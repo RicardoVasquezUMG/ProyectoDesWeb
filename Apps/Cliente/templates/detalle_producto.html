@@ -75,10 +75,14 @@
                 </div>
 
                 <div class="action-buttons">
-                  <button class="btn primary-action">
-                    <i class="bi bi-bag-plus"></i>
-                    Agregar al carrito
-                  </button>
+                  <form action="{% url 'Cliente:carrito_agregar' producto.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="cantidad" id="cantidad-input" value="1">
+                    <button type="submit" class="btn primary-action">
+                      <i class="bi bi-bag-plus"></i>
+                      Agregar al carrito
+                    </button>
+                  </form>
                   <button class="btn secondary-action">
                     <i class="bi bi-lightning"></i>
                     Comprar ahora
