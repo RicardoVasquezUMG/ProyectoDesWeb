@@ -144,28 +144,46 @@ class CrearDireccionView(CreateView):
 	
 # Vista para editar dirección
 class EditarDireccionView(UpdateView):
-	model = Direccion
-	form_class = DireccionForm
-	template_name = 'editar_direccion.html'
-	success_url = reverse_lazy('Cliente:direcciones')
+		model = Direccion
+		form_class = DireccionForm
+		template_name = 'editar_direccion.html'
+		success_url = reverse_lazy('Cliente:direcciones')
 
-	def form_valid(self, form):
-		direccion = form.save(commit=False)
-		try:
-			cliente = Cliente.objects.get(perfil=self.request.user)
-			direccion.cliente = cliente
-		except Cliente.DoesNotExist:
-			messages.error(self.request, "No se encontró el cliente asociado al usuario.")
-			return redirect('Cliente:loginapp')
-		direccion.save()
-		messages.success(self.request, "Dirección editada exitosamente.")
-		return redirect(self.success_url)
+		def get_context_data(self, **kwargs):
+			context = super().get_context_data(**kwargs)
+			try:
+				cliente = Cliente.objects.get(perfil=self.request.user)
+				context['cliente'] = cliente
+			except Cliente.DoesNotExist:
+				context['cliente'] = None
+			return context
+
+		def form_valid(self, form):
+			direccion = form.save(commit=False)
+			try:
+				cliente = Cliente.objects.get(perfil=self.request.user)
+				direccion.cliente = cliente
+			except Cliente.DoesNotExist:
+				messages.error(self.request, "No se encontró el cliente asociado al usuario.")
+				return redirect('Cliente:loginapp')
+			direccion.save()
+			messages.success(self.request, "Dirección editada exitosamente.")
+			return redirect(self.success_url)
 
 # Vista para eliminar dirección
 class EliminarDireccionView(DeleteView):
 	model = Direccion
 	template_name = 'eliminar_direccion.html'
 	success_url = reverse_lazy('Cliente:direcciones')
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		try:
+			cliente = Cliente.objects.get(perfil=self.request.user)
+			context['cliente'] = cliente
+		except Cliente.DoesNotExist:
+			context['cliente'] = None
+		return context
 
 	def delete(self, request, *args, **kwargs):
 		messages.success(self.request, "Dirección eliminada exitosamente.")
@@ -298,7 +316,7 @@ def formulario_pedido(request):
 		request.session['carrito'] = {}
 		request.session['carrito_cantidad'] = 0
 		request.session.modified = True
-		return redirect(reverse('Negocio:pedido_ver', args=[pedido.id]))
+		return redirect(reverse('Cliente:ordenes_ver', args=[pedido.id]))
 
 	return render(request, 'pedido_formulario.html', {
 		'direcciones': direcciones,

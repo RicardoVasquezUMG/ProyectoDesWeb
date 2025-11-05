@@ -127,11 +127,19 @@
                 <span class="summary-label">Total</span>
                 <span class="summary-value">Q {% if total > 75 %}{{ total }}{% else %}{{ total|add:25 }}{% endif %}</span>
               </div>
-              <div class="checkout-button">
-                <a href="{% url 'Cliente:formulario_pedido' %}" class="btn btn-accent w-100">
-                  Continuar pedido <i class="bi bi-arrow-right"></i>
-                </a>
-              </div>
+                {% if request.user.is_authenticated %}
+                <div class="checkout-button">
+                  <a href="{% url 'Cliente:formulario_pedido' %}" class="btn btn-accent w-100">
+                    Continuar pedido <i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+                {% else %}
+                <div class="checkout-button">
+                  <a href="{% url 'Cliente:loginapp' %}" class="btn btn-warning w-100">
+                    Inicia sesión para continuar el pedido <i class="bi bi-person"></i>
+                  </a>
+                </div>
+                {% endif %}
               <div class="continue-shopping">
                 <a href="{% url 'Cliente:menu' %}" class="btn btn-link w-100">
                   <i class="bi bi-arrow-left"></i> Continuar Comprando

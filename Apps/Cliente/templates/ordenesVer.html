@@ -86,7 +86,7 @@
                       <div class="detail-group">
                         <label>Enviar a</label>
                         <address>
-                          {{ cliente.perfil.username }}<br>
+                          {{ cliente.perfil.first_name }} {{ cliente.perfil.last_name }}<br>
                           {% if pedido.direccion_envio %}
                             {{ pedido.direccion_envio.direccion_linea1 }}<br>
                             {{ pedido.direccion_envio.Colonia }}<br>
