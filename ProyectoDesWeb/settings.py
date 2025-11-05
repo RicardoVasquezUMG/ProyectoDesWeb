@@ -82,7 +82,7 @@ DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL'),
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=False
     )
 }
 
@@ -126,8 +126,12 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(' ')
-CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(' ')
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost 127.0.0.1').split(' ')
+CSRF_TRUSTED_ORIGINS = os.environ.get(
+    'CSRF_TRUSTED_ORIGINS',
+    'https://localhost https://127.0.0.1'
+).split(' ')
+
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
